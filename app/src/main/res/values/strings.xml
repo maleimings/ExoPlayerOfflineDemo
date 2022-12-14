@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ExoPlayerOfflineDemo</string>
+    <string name="unable_to_get_the_downloaded_content">Unable to get the downloaded content</string>
+    <string name="start_downloading">"Start Downloading"</string>
+    <string name="download_in_progress">"Downloading"</string>
+    <string name="download_completed">"Download Completed"</string>
+    <string name="download_failed">"Download Failed"</string>
+    <string name="download_stopped">"Download Stopped"</string>
+    <string name="download_removing">"Removing"</string>
+</resources>
