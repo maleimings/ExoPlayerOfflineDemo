@@ -17,7 +17,7 @@ import org.koin.android.ext.android.inject
 class DownloadFragment : Fragment() {
 
     private lateinit var viewModel: DownloadViewModel
-    private lateinit var downloadedVideos: List<Download>
+    private lateinit var downloadedVideoItems: List<Item>
 
     private var _binding: FragmentDownloadBinding? = null
     private val binding get() =  _binding!!
@@ -34,7 +34,7 @@ class DownloadFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[DownloadViewModel::class.java]
 
-        downloadedVideos = viewModel.getDownloadedVideos(downloadManager)
+        downloadedVideoItems = viewModel.getDownloadedVideos(downloadManager)
     }
 
     override fun onCreateView(
@@ -51,10 +51,10 @@ class DownloadFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.list.run {
-            this.adapter = DownloadAdapter(downloadedVideos)
-            {url ->
+            this.adapter = DownloadAdapter(downloadedVideoItems)
+            {item ->
                 val intent = Intent(requireContext(), PlayerActivity::class.java)
-                intent.putExtra(PlayerActivity.URL, url)
+                intent.putExtra(PlayerActivity.ITEM, item)
                 startActivity(intent)
             }
             this.layoutManager = LinearLayoutManager(requireContext())

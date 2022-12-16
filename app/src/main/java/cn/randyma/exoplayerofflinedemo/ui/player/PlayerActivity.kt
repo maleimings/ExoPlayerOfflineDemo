@@ -7,11 +7,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cn.randyma.exoplayerofflinedemo.R
 import cn.randyma.exoplayerofflinedemo.databinding.ActivityPlayerBinding
+import cn.randyma.exoplayerofflinedemo.ui.download.Item
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.drm.DefaultDrmSessionManager
 import com.google.android.exoplayer2.drm.DefaultDrmSessionManagerProvider
+import com.google.android.exoplayer2.drm.FrameworkMediaDrm
+import com.google.android.exoplayer2.drm.HttpMediaDrmCallback
 import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadManager
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
@@ -28,6 +32,8 @@ class PlayerActivity: AppCompatActivity() {
     private val dataSourceFactory: DataSource.Factory by inject()
     private val httpDataSourceFactory: HttpDataSource.Factory by inject()
     private val downloadManager: DownloadManager by inject()
+
+    private var drmLicenseUrl: String = ""
 
     private val player by lazy {
         ExoPlayer.Builder(this)
@@ -85,10 +91,22 @@ class PlayerActivity: AppCompatActivity() {
             return
         }
 
-        val downloadMediaItem = downloadRequest.toMediaItem()
-
-        val drmSessionManager = drmSessionManagerProvider.get(downloadMediaItem) as? DefaultDrmSessionManager
-        drmSessionManager?.setMode(DefaultDrmSessionManager.MODE_PLAYBACK, downloadRequest.keySetId)
+        val drmSessionManager =
+            if (drmLicenseUrl.isNotEmpty()) {
+                DefaultDrmSessionManager.Builder()
+                    .setUuidAndExoMediaDrmProvider(
+                        C.WIDEVINE_UUID,
+                        FrameworkMediaDrm.DEFAULT_PROVIDER
+                    )
+                    .build(HttpMediaDrmCallback(drmLicenseUrl, dataSourceFactory)).apply {
+                        this.setMode(
+                            DefaultDrmSessionManager.MODE_PLAYBACK,
+                            downloadRequest.keySetId
+                        )
+                    }
+            } else {
+                null
+            }
 
         val mediaSource = DownloadHelper.createMediaSource(downloadRequest, cacheDataSourceFactory, drmSessionManager)
 
@@ -111,8 +129,9 @@ class PlayerActivity: AppCompatActivity() {
     }
 
     private fun createMediaItemFromIntent(intent: Intent): MediaItem {
-        intent.getStringExtra(URL)?.let {
-            downloadManager.downloadIndex.getDownload(it)?.run {
+        intent.getParcelableExtra<Item>(ITEM)?.let {
+            drmLicenseUrl = it.drmLicenseUrl
+            downloadManager.downloadIndex.getDownload(it.url)?.run {
                 return MediaItem.fromUri(this.request.uri)
             }
         }
@@ -121,6 +140,6 @@ class PlayerActivity: AppCompatActivity() {
     }
 
     companion object {
-        const val URL = "url"
+        const val ITEM = "item"
     }
 }

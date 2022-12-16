@@ -57,6 +57,7 @@ class MainFragment : Fragment() {
                 viewModel.getDownloadHelper(requireContext(), item, dataSourceFactory)
                     .prepare(object : DownloadHelper.Callback {
                         override fun onPrepared(helper: DownloadHelper) {
+                            var downloadRequest = helper.getDownloadRequest(item.url, item.url.toByteArray())
                             if (item.drmLicenseUrl.isNotEmpty()) {
                                 val header = HashMap<String, String>()
 
@@ -71,10 +72,14 @@ class MainFragment : Fragment() {
                                     DrmSessionEventListener.EventDispatcher())
 
                                 getFirstFormatWithDrmInitData(helper)?.let {
-                                    drmLicenseHelper.downloadLicense(it)
+                                    val keySetId = drmLicenseHelper.downloadLicense(it)
+                                    downloadRequest = downloadRequest.copyWithKeySetId(keySetId.copyOf())
+                                    ExoPlayerDownloadService.download(requireContext(), downloadRequest)
+                                    drmLicenseHelper.release()
                                 }
+                            } else {
+                                ExoPlayerDownloadService.download(requireContext(), downloadRequest)
                             }
-                            ExoPlayerDownloadService.download(requireContext(), helper.getDownloadRequest(item.url, item.url.toByteArray()))
                         }
 
                         override fun onPrepareError(helper: DownloadHelper, e: IOException) {

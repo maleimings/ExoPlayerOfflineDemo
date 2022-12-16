@@ -7,4 +7,6 @@
     <string name="download_failed">"Download Failed"</string>
     <string name="download_stopped">"Download Stopped"</string>
     <string name="download_removing">"Removing"</string>
+    <string name="downloaded_status">"Downloaded at %s %s"</string>
+    <string name="drm_content">", DRM protected content"</string>
 </resources>
