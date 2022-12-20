@@ -2,6 +2,7 @@ package cn.randyma.exoplayerofflinedemo.download
 
 import android.app.Notification
 import android.content.Context
+import android.widget.Toast
 import cn.randyma.exoplayerofflinedemo.R
 import cn.randyma.exoplayerofflinedemo.tools.NotificationHelper
 import com.google.android.exoplayer2.offline.Download
@@ -13,7 +14,7 @@ import com.google.android.exoplayer2.scheduler.Scheduler
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ExoPlayerDownloadService: DownloadService(
+class ExoPlayerDownloadService : DownloadService(
     NOTIFICATION_ID
 ), KoinComponent {
 
@@ -31,7 +32,16 @@ class ExoPlayerDownloadService: DownloadService(
         downloads: MutableList<Download>,
         notMetRequirements: Int
     ): Notification {
-        return createNotification()
+        return if (downloads.isEmpty()) {
+            NotificationHelper.createNotificationBuilder(
+                this,
+                this.getString(R.string.start_downloading),
+                this.getString(R.string.download_in_progress)
+            )
+                .build()
+        } else {
+            NotificationHelper.createNotification(this, downloads[0])
+        }
     }
 
     companion object {
@@ -40,6 +50,14 @@ class ExoPlayerDownloadService: DownloadService(
 
         fun download(context: Context, downloadRequest: DownloadRequest) {
             sendAddDownload(context, ExoPlayerDownloadService::class.java, downloadRequest, true)
+            Toast.makeText(
+                context,
+                String.format(
+                    context.getString(R.string.start_downloading_item),
+                    downloadRequest.uri.path
+                ),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         fun removeDownload(context: Context, downloadId: String) {
@@ -53,12 +71,6 @@ class ExoPlayerDownloadService: DownloadService(
         fun resumeDownloads(context: Context) {
             sendResumeDownloads(context, ExoPlayerDownloadService::class.java, true)
         }
-    }
-
-    private fun createNotification(): Notification {
-
-        return NotificationHelper.createNotificationBuilder(this, getString(R.string.start_downloading), getString(R.string.download_in_progress))
-            .build()
     }
 
 }

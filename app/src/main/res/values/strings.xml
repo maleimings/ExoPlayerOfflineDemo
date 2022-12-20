@@ -9,4 +9,5 @@
     <string name="download_removing">"Removing"</string>
     <string name="downloaded_status">"Downloaded at %s %s"</string>
     <string name="drm_content">", DRM protected content"</string>
+    <string name="start_downloading_item">"Start Downloading %s"</string>
 </resources>
