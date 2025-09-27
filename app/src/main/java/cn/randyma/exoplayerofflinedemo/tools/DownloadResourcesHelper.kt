@@ -1,7 +1,7 @@
 package cn.randyma.exoplayerofflinedemo.tools
 
+import androidx.media3.common.MimeTypes
 import cn.randyma.exoplayerofflinedemo.ui.download.Item
-import com.google.android.exoplayer2.util.MimeTypes
 
 object DownloadResourcesHelper {
     private val dashVideoItems = mutableListOf<Item>()

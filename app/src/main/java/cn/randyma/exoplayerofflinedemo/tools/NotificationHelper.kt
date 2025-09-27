@@ -7,11 +7,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.annotation.OptIn
 import androidx.core.app.NotificationCompat
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.Download
 import cn.randyma.exoplayerofflinedemo.MainActivity
 import cn.randyma.exoplayerofflinedemo.R
 import cn.randyma.exoplayerofflinedemo.download.ExoPlayerDownloadService
-import com.google.android.exoplayer2.offline.Download
 
 private const val MAX = 100
 
@@ -43,6 +45,7 @@ object NotificationHelper {
         return builder
     }
 
+    @OptIn(UnstableApi::class)
     fun createNotification(context: Context, download: Download): Notification {
         var notification: Notification? = null
         val content = download.request.uri.path ?: ""

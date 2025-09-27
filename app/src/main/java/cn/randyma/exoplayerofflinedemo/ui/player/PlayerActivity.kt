@@ -5,28 +5,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.media3.common.C
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.HttpDataSource
+import androidx.media3.datasource.cache.Cache
+import androidx.media3.datasource.cache.CacheDataSource
+import androidx.media3.exoplayer.DefaultRenderersFactory
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.drm.DefaultDrmSessionManager
+import androidx.media3.exoplayer.drm.DefaultDrmSessionManagerProvider
+import androidx.media3.exoplayer.drm.FrameworkMediaDrm
+import androidx.media3.exoplayer.drm.HttpMediaDrmCallback
+import androidx.media3.exoplayer.offline.DownloadHelper
+import androidx.media3.exoplayer.offline.DownloadManager
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.exoplayer.source.MediaSource
+import androidx.media3.exoplayer.util.DebugTextViewHelper
 import cn.randyma.exoplayerofflinedemo.R
 import cn.randyma.exoplayerofflinedemo.databinding.ActivityPlayerBinding
 import cn.randyma.exoplayerofflinedemo.ui.download.Item
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.drm.DefaultDrmSessionManager
-import com.google.android.exoplayer2.drm.DefaultDrmSessionManagerProvider
-import com.google.android.exoplayer2.drm.FrameworkMediaDrm
-import com.google.android.exoplayer2.drm.HttpMediaDrmCallback
-import com.google.android.exoplayer2.offline.DownloadHelper
-import com.google.android.exoplayer2.offline.DownloadManager
-import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.HttpDataSource
-import com.google.android.exoplayer2.upstream.cache.Cache
-import com.google.android.exoplayer2.upstream.cache.CacheDataSource
-import com.google.android.exoplayer2.util.DebugTextViewHelper
+
 import org.koin.android.ext.android.inject
 
+@UnstableApi
 class PlayerActivity: AppCompatActivity() {
     private val cache: Cache by inject()
     private val dataSourceFactory: DataSource.Factory by inject()
@@ -37,7 +40,8 @@ class PlayerActivity: AppCompatActivity() {
 
     private val player by lazy {
         ExoPlayer.Builder(this)
-            .setRenderersFactory(DefaultRenderersFactory(this.applicationContext)
+            .setRenderersFactory(
+                DefaultRenderersFactory(this.applicationContext)
                 .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER))
             .setMediaSourceFactory(createMediaSourceFactory())
             .build()

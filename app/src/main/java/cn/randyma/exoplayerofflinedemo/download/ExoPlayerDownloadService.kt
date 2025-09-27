@@ -3,17 +3,19 @@ package cn.randyma.exoplayerofflinedemo.download
 import android.app.Notification
 import android.content.Context
 import android.widget.Toast
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.Download
+import androidx.media3.exoplayer.offline.DownloadManager
+import androidx.media3.exoplayer.offline.DownloadRequest
+import androidx.media3.exoplayer.offline.DownloadService
+import androidx.media3.exoplayer.scheduler.PlatformScheduler
+import androidx.media3.exoplayer.scheduler.Scheduler
 import cn.randyma.exoplayerofflinedemo.R
 import cn.randyma.exoplayerofflinedemo.tools.NotificationHelper
-import com.google.android.exoplayer2.offline.Download
-import com.google.android.exoplayer2.offline.DownloadManager
-import com.google.android.exoplayer2.offline.DownloadRequest
-import com.google.android.exoplayer2.offline.DownloadService
-import com.google.android.exoplayer2.scheduler.PlatformScheduler
-import com.google.android.exoplayer2.scheduler.Scheduler
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+@UnstableApi
 class ExoPlayerDownloadService : DownloadService(
     NOTIFICATION_ID
 ), KoinComponent {

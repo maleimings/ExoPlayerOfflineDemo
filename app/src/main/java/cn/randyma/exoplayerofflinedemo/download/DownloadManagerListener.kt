@@ -2,11 +2,13 @@ package cn.randyma.exoplayerofflinedemo.download
 
 import android.app.NotificationManager
 import android.content.Context
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.Download
+import androidx.media3.exoplayer.offline.DownloadManager
 import cn.randyma.exoplayerofflinedemo.tools.NotificationHelper
-import com.google.android.exoplayer2.offline.Download
-import com.google.android.exoplayer2.offline.DownloadManager
 import java.lang.Exception
 
+@UnstableApi
 class DownloadManagerListener(private val context: Context): DownloadManager.Listener {
 
     override fun onDownloadChanged(
