@@ -1,12 +1,15 @@
 package cn.randyma.exoplayerofflinedemo.ui.download
 
+import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.Download
+import androidx.media3.exoplayer.offline.DownloadManager
 import cn.randyma.exoplayerofflinedemo.tools.DownloadResourcesHelper
-import com.google.android.exoplayer2.offline.Download
-import com.google.android.exoplayer2.offline.DownloadManager
 
 class DownloadViewModel : ViewModel() {
 
+    @OptIn(UnstableApi::class)
     fun getDownloadedVideos(downloadManager: DownloadManager): List<Item> {
         val downloadCursor = downloadManager.downloadIndex.getDownloads(Download.STATE_COMPLETED)
         val downloadedList = mutableListOf<Download>()

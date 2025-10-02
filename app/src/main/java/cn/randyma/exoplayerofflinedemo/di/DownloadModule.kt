@@ -1,20 +1,23 @@
 package cn.randyma.exoplayerofflinedemo.di
 
+import android.annotation.SuppressLint
+import androidx.media3.database.DatabaseProvider
+import androidx.media3.database.StandaloneDatabaseProvider
+import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.datasource.HttpDataSource
+import androidx.media3.datasource.cache.Cache
+import androidx.media3.datasource.cache.NoOpCacheEvictor
+import androidx.media3.datasource.cache.SimpleCache
+import androidx.media3.exoplayer.offline.DownloadManager
 import cn.randyma.exoplayerofflinedemo.download.DownloadManagerListener
-import com.google.android.exoplayer2.database.DatabaseProvider
-import com.google.android.exoplayer2.database.StandaloneDatabaseProvider
-import com.google.android.exoplayer2.offline.DownloadManager
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
-import com.google.android.exoplayer2.upstream.HttpDataSource
-import com.google.android.exoplayer2.upstream.cache.Cache
-import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor
-import com.google.android.exoplayer2.upstream.cache.SimpleCache
+
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import java.io.File
 import java.util.concurrent.Executors
 
+@SuppressLint("UnsafeOptInUsageError")
 val downloadModule = module {
 
     single<DownloadManager> {

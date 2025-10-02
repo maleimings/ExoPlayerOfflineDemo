@@ -6,17 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.Nullable
+import androidx.annotation.OptIn
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.media3.common.Format
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.exoplayer.drm.DrmSessionEventListener
+import androidx.media3.exoplayer.drm.OfflineLicenseHelper
+import androidx.media3.exoplayer.offline.DownloadHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.randyma.exoplayerofflinedemo.databinding.FragmentMainBinding
 import cn.randyma.exoplayerofflinedemo.download.ExoPlayerDownloadService
 import cn.randyma.exoplayerofflinedemo.ui.download.Item
-import com.google.android.exoplayer2.Format
-import com.google.android.exoplayer2.drm.DrmSessionEventListener
-import com.google.android.exoplayer2.drm.OfflineLicenseHelper
-import com.google.android.exoplayer2.offline.DownloadHelper
-import com.google.android.exoplayer2.upstream.HttpDataSource.Factory
 import org.koin.android.ext.android.inject
 import java.io.IOException
 
@@ -32,7 +35,7 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
 
-    private val dataSourceFactory: Factory by inject()
+    private val dataSourceFactory: DataSource.Factory by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,7 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    @OptIn(UnstableApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -92,6 +96,7 @@ class MainFragment : Fragment() {
         }
     }
 
+    @OptIn(UnstableApi::class)
     @Nullable
     private fun getFirstFormatWithDrmInitData(helper: DownloadHelper): Format? {
         for (periodIndex in 0 until helper.periodCount) {

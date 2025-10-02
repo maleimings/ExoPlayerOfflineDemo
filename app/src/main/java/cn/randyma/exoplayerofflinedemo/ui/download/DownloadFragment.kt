@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.randyma.exoplayerofflinedemo.databinding.FragmentDownloadBinding
 import cn.randyma.exoplayerofflinedemo.ui.player.PlayerActivity
-import com.google.android.exoplayer2.offline.Download
-import com.google.android.exoplayer2.offline.DownloadManager
 import org.koin.android.ext.android.inject
 
+@UnstableApi
 class DownloadFragment : Fragment() {
 
     private lateinit var viewModel: DownloadViewModel
